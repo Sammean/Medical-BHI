@@ -1,7 +1,6 @@
 # !/usr/bin/env python3
 # -*- coding:utf-8 -*-
-
-# @Time    : 2023/11/02 22:29
+# @Time    : 202311/02 22:29
 # @Author  : Sammean Shaw
 # @FileName: scratch.py
 import SimpleITK as sitk

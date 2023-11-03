@@ -1,11 +1,11 @@
 # !/usr/bin/env python3
 # -*- coding:utf-8 -*-
-
 # @Time    : 2023/11/02 11:02
 # @Author  : Sammean Shaw
 # @FileName: register.py
+import glob
+import os
 import ants
-import glob, os
 
 
 class Register(object):

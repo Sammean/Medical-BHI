@@ -1,6 +1,5 @@
 # !/usr/bin/env python3
 # -*- coding:utf-8 -*-
-
 # @Time    : 2023/11/02 15:09
 # @Author  : Sammean Shaw
 # @FileName: bhi.py
@@ -14,6 +13,15 @@ from scipy.stats import zscore
 
 
 class BHI(object):
+    """Calculate a Subject BHI
+    :parameter
+        :param mri_list: the MRIs paths of the subject, e.g. [T1.nii.gz, FL.nii.gz, ... ]
+        :param icv_path: the ICV mask path of the subject, e.g. [mask.nii.gz]
+        :param ratio: Used to control the map, when generating the visualization of 'health mask'
+        :param idx: a inner parameter for the name of generated health mask
+    :return
+        bhi_mean: BHI
+    """
     def __init__(self, mri_list=None, icv_path=None, ratio=0, idx=None):
         self.icv = icv_path
         self.img_list = mri_list
@@ -23,35 +31,46 @@ class BHI(object):
     def get_bhi(self):
         mri_data = None
         icv = sitk.ReadImage(self.icv)
-        icv_mask = sitk.GetArrayFromImage(icv)
+        icv_mask = sitk.GetArrayFromImage(icv)      # icv_mask[D,H,W]
         for l in self.img_list:
-            img = sitk.GetArrayFromImage(sitk.ReadImage(l))
-            img = zscore(img)
+            img = sitk.GetArrayFromImage(sitk.ReadImage(l))     # img[D,H,W]
+            img = zscore(img)   # Normalization --> img[D,H,W]
             mri_data = np.stack((mri_data, img[icv_mask != 0]), axis=-1) \
                 if mri_data is not None else img[icv_mask != 0]
-        # mri_data = mri_data.reshape((-1, len(self.img_list)))
+            # mri_data[voxel nums of brain, nums of MRI modalities]
 
         n_clusters = 2
         gmm = GaussianMixture(n_components=n_clusters, random_state=725)
         gmm.fit(mri_data)
 
         posterior_probabilities = gmm.predict_proba(mri_data)
-        bhi_mean = np.mean(posterior_probabilities, axis=0)
+        bhi_mean = np.mean(posterior_probabilities, axis=0)     # each class mean probability, bhi_mean[a,b=1-a]
 
-        # Generate Health Mask
-        # labels = np.where(posterior_probabilities > self.r, 3, 0)
-        # health_mask = np.zeros_like(icv_mask)
-        # health_mask[icv_mask != 0] = labels
-        # out = sitk.GetImageFromArray(health_mask)
-        # out.CopyInformation(icv)
-        # des = os.path.join(os.path.dirname(os.path.dirname(self.icv)), f'health_mask_ratio_{self.r}')
-        # os.makedirs(des, exist_ok=True)
-        # sitk.WriteImage(out, os.path.join(des, self.idx + '_bhi{:04f}.nii.gz'.format(bhi_mean)))
+        # Generate Health Mask According to Ratio
+        # Find more implementation details in /Code/scratch/scratch.py
+        labels = np.where(posterior_probabilities > self.r, 3, 0)
+        health_mask = np.zeros_like(icv_mask)
+        health_mask[icv_mask != 0] = labels
+        out = sitk.GetImageFromArray(health_mask)
+        out.CopyInformation(icv)
+        des = os.path.join(os.path.dirname(os.path.dirname(self.icv)), f'health_mask_ratio_{self.r}')
+        os.makedirs(des, exist_ok=True)
+        sitk.WriteImage(out, os.path.join(des, self.idx + '_bhi{:04f}.nii.gz'.format(bhi_mean)))
 
+        # In general, health voxels should more than those present abnormal (I guess~)
+        # So, return bigger value
         return np.max(bhi_mean)
 
 
 class BHIs(object):
+    """Calculate BHIs
+    :parameter
+        :param mri_list: Multimodal MRI Directory of subjects, e.g. [*/T1, */FL, ... ]
+        :param icv_paths: the ICV mask paths of subjects, e.g. [*/Mask]
+        :param ratio: Used to control the map, when generating the visualization of 'health mask'
+    :return
+        bhi_means: BHIs
+    """
     def __init__(self, mri_list=None, icv_paths=None, ratio=0):
         self.icv = icv_paths
         self.mri_list = mri_list
@@ -59,7 +78,7 @@ class BHIs(object):
 
     def cal_bhi(self):
         bhi_means = []
-        for item in os.listdir(self.icv):
+        for item in os.listdir(self.icv):       # Collect one subject infos : icv_mask, [MRIs]
             idx = item.split('_')[0] + '_' + item.split('_')[1]
             icv_path = os.path.join(self.icv, item)
             mri_path = []
@@ -89,6 +108,6 @@ if __name__ == '__main__':
         r'E:\Win10_data\BHI\Data\Paired\Reg_with_MNI152',
         r'E:\Win10_data\BHI\Data\Paired\Reg_with_MNI152_T1'
     ]
-    operator = BHIs(mri_p, mask_p, ratio=0.5)
+    operator = BHIs(mri_p, mask_p, ratio=0.1)
     res = operator.cal_bhi()
     print(res)
