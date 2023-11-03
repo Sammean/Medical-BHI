@@ -1,16 +1,16 @@
 The Data Should Organized in the Format like:
 
-Data
+    Data
 
-  |----(MNI152)Templete  # Could be any reasonable Templete
+      |----(MNI152)Templete  # Could be any reasonable Templete
   
-  |----T1_raw
+      |----T1_raw
   
-  |----FLAIR_raw
+      |----FLAIR_raw
   
-  |----T2_raw
+      |----T2_raw
   
-  ......
+      ......
   
-  |----modality_raw
+      |----modality_raw
   
