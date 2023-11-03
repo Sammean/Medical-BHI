@@ -40,12 +40,26 @@ This also referenced [*Normative values of the brain health index in UK biobank*
 ## About the Data
 
 ### 1. Data Preprocessing
-### 2. Format of Data
+
+In `util` are some scripts for processing data. Here are some main introductions.
+
+- `register.py`: run this to register MRIs.
+- `bet_script.py`:  If FSL was installed, run this to obtain the brain masks.
+
+### 2. Data Formation
+
+Provided there are original MRIs of various modalities in correspond directories, `e.g. /T1, /T2, /FLAIR, ...`
+
+1. Register to a template, obtaining registered MRIs: `/T1_reg, /T2_reg, /FLAIR_reg, ...`
+2. Bet MRIs of one modality, obtaining the brain masks: `/brain_masks`
+
+Once get the `registered data` and the `brain masks`, than BHI could be calculated.
 
 ---
 
 ## About Visualization
 
 - **If want to check the 'Health Mask'**
-
-(to be continued......)
+Restore the annotated codes in `bhi.py`, "Brain Health Mask Visualization" part
+Use parameter `Ratio` to control the generated health masks
+(I found the ratio is usually set to a small value (e.g. 0.05~0.5), and the larger the ratio, the smaller the generated masks are)

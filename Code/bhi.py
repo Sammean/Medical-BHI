@@ -47,19 +47,22 @@ class BHI(object):
         bhi_mean = np.mean(posterior_probabilities, axis=0)     # each class mean probability, bhi_mean[a,b=1-a]
         max_idx = np.argmax(bhi_mean)
 
-        # Generate Health Mask According to Ratio
-        # Find more implementation details in /Code/scratch/scratch.py
-        labels = np.where(posterior_probabilities[:, max_idx] > self.r, 3, 0)
-        health_mask = np.zeros_like(icv_mask)
-        health_mask[icv_mask != 0] = labels
-        out = sitk.GetImageFromArray(health_mask)
-        out.CopyInformation(icv)
-        des = os.path.join(os.path.dirname(os.path.dirname(self.icv)), f'health_mask_ratio_{self.r}')
-        os.makedirs(des, exist_ok=True)
-        sitk.WriteImage(out, os.path.join(des, self.idx + '_bhi{:04f}.nii.gz'.format(bhi_mean[max_idx])))
+        '''
+        Brain Health Mask Visualization
+        Codes Below: Generate Health Mask According to Ratio
+        (Find more details of implementation in /Code/scratch/scratch.py)
+        '''
+        # labels = np.where(posterior_probabilities[:, max_idx] > self.r, 3, 0)
+        # health_mask = np.zeros_like(icv_mask)
+        # health_mask[icv_mask != 0] = labels
+        # out = sitk.GetImageFromArray(health_mask)
+        # out.CopyInformation(icv)
+        # des = os.path.join(os.path.dirname(os.path.dirname(self.icv)), f'health_mask_ratio_{self.r}')
+        # os.makedirs(des, exist_ok=True)
+        # sitk.WriteImage(out, os.path.join(des, self.idx + '_bhi{:04f}.nii.gz'.format(bhi_mean[max_idx])))
 
         # In general, health voxels should more than those present abnormal (I guess~)
-        # So, return bigger value
+        # So, return a bigger value
         return bhi_mean[max_idx]
 
 
