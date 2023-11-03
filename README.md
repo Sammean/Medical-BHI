@@ -1,7 +1,5 @@
 # The Brain Health Index
 
----
-
 ## Introduction
 
 This is an implementation of  [*The brain health index: Towards a combined measure of neurovascular and neurodegenerative structural brain injury.*](https://journals.sagepub.com/doi/10.1177/1747493018770222)
