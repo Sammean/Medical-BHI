@@ -41,18 +41,18 @@ if __name__ == '__main__':
     root = os.path.dirname(os.path.dirname(os.getcwd()))
 
     # register t1 to flair
-    # r = Register(os.path.join(root, 'Data', 'Paired', 'FLAIR'), os.path.join(root, 'Data', 'Paired', 'T1'))
+    # r = Register(os.path.join(root, 'Dataset', 'Paired', 'FLAIR'), os.path.join(root, 'Dataset', 'Paired', 'T1'))
     # r.reg_awb()
 
     # register t1 with MNI152
-    # r = Register(os.path.join(root, 'Data', 'Template', 'MNI152_T1_1mm.nii.gz'),
-    #              os.path.join(root, 'Data', 'Paired', 'T1'),
+    # r = Register(os.path.join(root, 'Dataset', 'Template', 'MNI152_T1_1mm.nii.gz'),
+    #              os.path.join(root, 'Dataset', 'Paired', 'T1'),
     #              'Reg_with_MNI152')
     # r.reg_standard()
 
     # register flair to MNI152_t1
-    r = Register(os.path.join(root, 'Data', 'Paired', 'Reg_with_MNI152'),
-                 os.path.join(root, 'Data', 'Paired', 'FLAIR'),
+    r = Register(os.path.join(root, 'Dataset', 'Paired', 'Reg_with_MNI152'),
+                 os.path.join(root, 'Dataset', 'Paired', 'FLAIR'),
                  'Reg_with_MNI152_T1')
     r.reg_awb()
 

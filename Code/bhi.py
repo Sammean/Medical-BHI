@@ -45,21 +45,22 @@ class BHI(object):
 
         posterior_probabilities = gmm.predict_proba(mri_data)
         bhi_mean = np.mean(posterior_probabilities, axis=0)     # each class mean probability, bhi_mean[a,b=1-a]
+        max_idx = np.argmax(bhi_mean)
 
         # Generate Health Mask According to Ratio
         # Find more implementation details in /Code/scratch/scratch.py
-        labels = np.where(posterior_probabilities > self.r, 3, 0)
+        labels = np.where(posterior_probabilities[:, max_idx] > self.r, 3, 0)
         health_mask = np.zeros_like(icv_mask)
         health_mask[icv_mask != 0] = labels
         out = sitk.GetImageFromArray(health_mask)
         out.CopyInformation(icv)
         des = os.path.join(os.path.dirname(os.path.dirname(self.icv)), f'health_mask_ratio_{self.r}')
         os.makedirs(des, exist_ok=True)
-        sitk.WriteImage(out, os.path.join(des, self.idx + '_bhi{:04f}.nii.gz'.format(bhi_mean)))
+        sitk.WriteImage(out, os.path.join(des, self.idx + '_bhi{:04f}.nii.gz'.format(bhi_mean[max_idx])))
 
         # In general, health voxels should more than those present abnormal (I guess~)
         # So, return bigger value
-        return np.max(bhi_mean)
+        return bhi_mean[max_idx]
 
 
 class BHIs(object):
@@ -95,19 +96,19 @@ class BHIs(object):
 if __name__ == '__main__':
 
     # Single-Test
-    # mask = r'E:\Win10_data\BHI\Data\Paired\mask\sub-OAS30001_ses-d2430_T1w_mask.nii.gz'
-    # flair = r'E:\Win10_data\BHI\Data\Paired\Reg_with_MNI152_brain\sub-OAS30001_ses-d2430_T1w.nii.gz'
-    # t1 = r'E:\Win10_data\BHI\Data\Paired\Reg_with_MNI152_T1_brain\sub-OAS30001_ses-d2430_FLAIR.nii.gz'
+    # mask = r'E:\Win10_data\BHI\Dataset\Paired\mask\sub-OAS30001_ses-d2430_T1w_mask.nii.gz'
+    # flair = r'E:\Win10_data\BHI\Dataset\Paired\Reg_with_MNI152_brain\sub-OAS30001_ses-d2430_T1w.nii.gz'
+    # t1 = r'E:\Win10_data\BHI\Dataset\Paired\Reg_with_MNI152_T1_brain\sub-OAS30001_ses-d2430_FLAIR.nii.gz'
     # operator = BHI(flair, t1, icv_path=mask, ratio=0.5)
     # res = operator.get_bhi()
     # print(res)
 
     # Multi-Test
-    mask_p = r'E:\Win10_data\BHI\Data\Paired\mask'
+    mask_p = r'E:\Win10_data\BHI\Dataset\Paired\mask'
     mri_p = [
-        r'E:\Win10_data\BHI\Data\Paired\Reg_with_MNI152',
-        r'E:\Win10_data\BHI\Data\Paired\Reg_with_MNI152_T1'
+        r'E:\Win10_data\BHI\Dataset\Paired\Reg_with_MNI152',
+        r'E:\Win10_data\BHI\Dataset\Paired\Reg_with_MNI152_T1'
     ]
-    operator = BHIs(mri_p, mask_p, ratio=0.1)
+    operator = BHIs(mri_p, mask_p, ratio=0.05)
     res = operator.cal_bhi()
     print(res)

@@ -7,9 +7,9 @@ import SimpleITK as sitk
 import numpy as np
 
 if __name__ == '__main__':
-    mask = r'E:\Win10_data\BHI\Data\Paired\mask\sub-OAS30001_ses-d2430_T1w_mask.nii.gz'
-    mri = r'E:\Win10_data\BHI\Data\Paired\Reg_with_MNI152\sub-OAS30001_ses-d2430_T1w.nii.gz'
-    mri2 = r'E:\Win10_data\BHI\Data\Paired\Reg_with_MNI152_T1\sub-OAS30001_ses-d2430_FLAIR.nii.gz'
+    mask = r'E:\Win10_data\BHI\Dataset\Paired\mask\sub-OAS30001_ses-d2430_T1w_mask.nii.gz'
+    mri = r'E:\Win10_data\BHI\Dataset\Paired\Reg_with_MNI152\sub-OAS30001_ses-d2430_T1w.nii.gz'
+    mri2 = r'E:\Win10_data\BHI\Dataset\Paired\Reg_with_MNI152_T1\sub-OAS30001_ses-d2430_FLAIR.nii.gz'
     arr = sitk.GetArrayFromImage(sitk.ReadImage(mask))
     img = sitk.GetArrayFromImage(sitk.ReadImage(mri))
     img2 = sitk.GetArrayFromImage(sitk.ReadImage(mri2))

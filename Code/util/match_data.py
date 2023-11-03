@@ -38,7 +38,7 @@ class MatchFinder(object):
 
 if __name__ == '__main__':
     root = os.path.dirname(os.path.dirname(os.getcwd()))
-    mf = MatchFinder(os.path.join(root, 'Data', 'FLAIR_raw'),
-                     os.path.join(root, 'Data', 'T1_raw'),
-                     os.path.join(root, 'Data', 'Paired'))
+    mf = MatchFinder(os.path.join(root, 'Dataset', 'FLAIR_raw'),
+                     os.path.join(root, 'Dataset', 'T1_raw'),
+                     os.path.join(root, 'Dataset', 'Paired'))
     mf.find()

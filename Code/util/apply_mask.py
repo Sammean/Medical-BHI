@@ -31,7 +31,7 @@ class ICVMasker(object):
 
 
 if __name__ == '__main__':
-    root = os.path.join(os.path.dirname(os.path.dirname(os.getcwd())), 'Data', 'Paired')
+    root = os.path.join(os.path.dirname(os.path.dirname(os.getcwd())), 'Dataset', 'Paired')
     icv = ICVMasker(os.path.join(root, 'mask'),
                     os.path.join(root, 'Reg_with_MNI152'), os.path.join(root, 'Reg_with_MNI152_T1'))
     icv.get_brain()
