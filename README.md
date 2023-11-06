@@ -60,6 +60,9 @@ Once get the `registered data` and the `brain masks`, than BHI could be calculat
 ## About Visualization
 
 - **If want to check the 'Health Mask'**
-Restore the annotated codes in `bhi.py`, "Brain Health Mask Visualization" part
-Use parameter `Ratio` to control the generated health masks
-(I found the ratio is usually set to a small value (e.g. 0.05~0.5), and the larger the ratio, the smaller the generated masks are)
+
+  Restore the annotated codes in `bhi.py`, "Brain Health Mask Visualization" part
+
+  Use parameter `Ratio` to control the generated health masks
+
+  (I found the ratio is usually set to a small value (e.g. 0.05~0.5), and the larger the ratio, the smaller the generated masks are)
