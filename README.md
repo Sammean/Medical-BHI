@@ -16,7 +16,7 @@ This project also referenced [*Normative values of the brain health index in UK 
 
 ### 2. ICV Mask
 
-- Using BET on standardised T1w MRI to generate the mask of brain, which than be considered the ICV mask.
+- Using BET on standardised T1w MRI to generate the mask of brain, which than be considered as the ICV mask.
 
    (The validity of this step is debatable~)
 
